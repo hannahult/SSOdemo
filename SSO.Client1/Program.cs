@@ -3,23 +3,44 @@ using Microsoft.AspNetCore.Components.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "Cookies";
+    options.DefaultChallengeScheme = "oidc";
+})
+.AddCookie("Cookies")
+.AddOpenIdConnect("oidc", options =>
+{
+    options.Authority = "https://localhost:5001"; // IdentityServer URL
+    options.ClientId = "client1";
+    options.ClientSecret = "secret";
+    options.ResponseType = "code";
+    options.SaveTokens = true;
+    options.Scope.Add("email");
+    options.Scope.Add("profile");
+    options.RequireHttpsMetadata = false; // för lokal test
+});
+
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+   
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseRouting();
 
