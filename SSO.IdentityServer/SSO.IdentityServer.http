@@ -1,0 +1,6 @@
+@SSO.IdentityServer_HostAddress = http://localhost:5203
+
+GET {{SSO.IdentityServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
