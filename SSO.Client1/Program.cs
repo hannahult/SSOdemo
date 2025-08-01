@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +16,7 @@ builder.Services.AddAuthentication(options =>
 .AddCookie("Cookies")
 .AddOpenIdConnect("oidc", options =>
 {
-    options.Authority = "https://localhost:5001"; // IdentityServer URL
+    options.Authority = "https://localhost:"; // IdentityServer URL
     options.ClientId = "client1";
     options.ClientSecret = "secret";
     options.ResponseType = "code";
