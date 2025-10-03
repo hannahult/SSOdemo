@@ -16,14 +16,14 @@ builder.Services.AddAuthentication(options =>
 .AddCookie("Cookies")
 .AddOpenIdConnect("oidc", options =>
 {
-    options.Authority = "https://localhost:"; // IdentityServer URL
+    options.Authority = "https://localhost:"; 
     options.ClientId = "client1";
     options.ClientSecret = "secret";
     options.ResponseType = "code";
     options.SaveTokens = true;
     options.Scope.Add("email");
     options.Scope.Add("profile");
-    options.RequireHttpsMetadata = false; // lokal test
+    options.RequireHttpsMetadata = false; //lokal testing
 });
 
 builder.Services.AddAuthorization();
