@@ -23,7 +23,7 @@ builder.Services.AddAuthentication(options =>
     options.SaveTokens = true;
     options.Scope.Add("email");
     options.Scope.Add("profile");
-    options.RequireHttpsMetadata = false; // för lokal test
+    options.RequireHttpsMetadata = false; // lokal test
 });
 
 builder.Services.AddAuthorization();
