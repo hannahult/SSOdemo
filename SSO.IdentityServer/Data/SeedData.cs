@@ -31,10 +31,35 @@ namespace SSO.IdentityServer.Data
                 {
                     ClientId = "client1",
                     ClientSecret = "secret",
-                    DisplayName = "Blazor Client 1",
+                    DisplayName = "MVC Client 1",
                     RedirectUris = { new Uri("https://localhost:7272/signin-oidc") },
                     ClientType = ClientTypes.Confidential,
                     PostLogoutRedirectUris = { new Uri("https://localhost:7272/signout-callback-oidc") },
+                    Permissions =
+                {
+                    Permissions.Endpoints.Authorization,
+                    Permissions.Endpoints.Token,
+                    Permissions.GrantTypes.AuthorizationCode,
+                    Permissions.ResponseTypes.Code,
+                    Permissions.Scopes.Email,
+                    Permissions.Scopes.Profile,
+                    Permissions.Prefixes.Scope + Scopes.Email,
+                    Permissions.Prefixes.Scope + Scopes.Profile,
+                    Permissions.Prefixes.Scope + Scopes.OpenId,
+                    Permissions.Prefixes.Resource + "resource_server"
+                }
+                });
+            }
+            if (await appManager.FindByClientIdAsync("client2") is null)
+            {
+                await appManager.CreateAsync(new OpenIddictApplicationDescriptor
+                {
+                    ClientId = "client2",
+                    ClientSecret = "secret",
+                    DisplayName = "MVC Client 2",
+                    RedirectUris = { new Uri("https://localhost:7103/signin-oidc") },
+                    ClientType = ClientTypes.Confidential,
+                    PostLogoutRedirectUris = { new Uri("https://localhost:7103/signout-callback-oidc") },
                     Permissions =
                 {
                     Permissions.Endpoints.Authorization,
