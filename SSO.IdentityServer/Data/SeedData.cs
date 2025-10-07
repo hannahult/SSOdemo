@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict.Abstractions;
+using OpenIddict.Server.AspNetCore;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace SSO.IdentityServer.Data
@@ -31,7 +32,9 @@ namespace SSO.IdentityServer.Data
                     ClientId = "client1",
                     ClientSecret = "secret",
                     DisplayName = "Blazor Client 1",
-                    RedirectUris = { new Uri("https://localhost:1111/signin-oidc") },
+                    RedirectUris = { new Uri("https://localhost:7272/signin-oidc") },
+                    ClientType = ClientTypes.Confidential,
+                    PostLogoutRedirectUris = { new Uri("https://localhost:7272/signout-callback-oidc") },
                     Permissions =
                 {
                     Permissions.Endpoints.Authorization,
@@ -39,7 +42,11 @@ namespace SSO.IdentityServer.Data
                     Permissions.GrantTypes.AuthorizationCode,
                     Permissions.ResponseTypes.Code,
                     Permissions.Scopes.Email,
-                    Permissions.Scopes.Profile
+                    Permissions.Scopes.Profile,
+                    Permissions.Prefixes.Scope + Scopes.Email,
+                    Permissions.Prefixes.Scope + Scopes.Profile,
+                    Permissions.Prefixes.Scope + Scopes.OpenId,
+                    Permissions.Prefixes.Resource + "resource_server"
                 }
                 });
             }

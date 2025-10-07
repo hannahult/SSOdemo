@@ -1,0 +1,15 @@
+﻿<h3>Error</h3>
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <p class="text-danger">@ErrorMessage</p>
+}
+else
+{
+    <p class="text-danger">An error occurred while processing your request.</p>
+}
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? ErrorMessage { get; set; }
+}

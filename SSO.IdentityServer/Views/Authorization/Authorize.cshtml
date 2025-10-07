@@ -1,0 +1,36 @@
+﻿@using OpenIddict.Abstractions
+@model OpenIddict.Abstractions.OpenIddictRequest
+
+@{
+    ViewData["Title"] = "Logga in";
+    var requestId = ViewData["RequestId"] as string;
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-controller="Authorization" asp-action="Accept" method="post">
+    @Html.AntiForgeryToken()
+    <p>
+        Den här applikationen vill få tillgång till ditt konto:
+    </p>
+
+    <ul>
+        @if (Model != null && Model.Scope != null)
+        {
+            foreach (var scope in Model.GetScopes())
+            {
+                <li>@scope</li>
+            }
+        }
+    </ul>
+
+    <input type="hidden" name="client_id" value="@Model.ClientId" />
+    <input type="hidden" name="redirect_uri" value="@Model.RedirectUri" />
+    <input type="hidden" name="scope" value="@Model.Scope" />
+    <input type="hidden" name="response_type" value="@Model.ResponseType" />
+    <input type="hidden" name="state" value="@Model.State" />
+    <input type="hidden" name="nonce" value="@Model.Nonce" />
+
+    <button type="submit" name="submit" value="accept" class="btn btn-primary">Tillåt</button>
+    <button type="submit" name="submit" value="deny" class="btn btn-secondary">Avbryt</button>
+</form>

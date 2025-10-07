@@ -14,7 +14,7 @@ builder.Services.AddAuthentication(options =>
 .AddCookie("Cookies")
 .AddOpenIdConnect("oidc", options =>
 {
-    options.Authority = "https://localhost:";
+    options.Authority = "https://localhost:7013";
     options.ClientId = "client2";
     options.ClientSecret = "secret";
     options.ResponseType = "code";
@@ -25,6 +25,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization();
+builder.Services.AddCascadingAuthenticationState();
 
 var app = builder.Build();
 
@@ -41,6 +42,8 @@ app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllers();
 
 app.UseRouting();
 

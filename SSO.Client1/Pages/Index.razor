@@ -1,50 +1,44 @@
 ﻿@page "/"
-@attribute [Authorize]
 @inject NavigationManager Nav
-@inject AuthenticationStateProvider AuthStateProvider
-
-<PageTitle>Hem</PageTitle>
 
 <h3>Välkommen till Client1</h3>
 
 <AuthorizeView>
-    <Authorized>
-        <p>Du är inloggad som: <strong>@context.User.Identity.Name</strong></p>
+    <Authorized Context="auth">
+        <p>Du är <strong>inloggad</strong> som <strong>@auth.User.Identity.Name</strong></p>
 
-        <button @onclick="() => NavigateToLogout()">
-            Logga ut
-        </button>
-
-        <p>
-            <strong>Token:</strong>
-            @foreach (var claim in context.User.Claims)
+        <p><strong>Dina claims:</strong></p>
+        <ul>
+            @foreach (var claim in auth.User.Claims)
             {
-                <div>@claim.Type: @claim.Value</div>
+                <li><code>@claim.Type</code>: @claim.Value</li>
             }
-        </p>
+        </ul>
+
+        <button class="btn btn-danger" @onclick="Logout">Logga ut</button>
     </Authorized>
+
     <NotAuthorized>
-        <p>Du är inte inloggad.</p>
-        <button @onclick="() => NavigateToLogin()">
-            Logga in med SSO
-        </button>
+        <p>Du är <strong>inte inloggad</strong>.</p>
+        <p>Klicka på knappen nedan för att logga in via SSO:</p>
+        <button class="btn btn-primary" @onclick="Login">Logga in med SSO</button>
+
+
+
+        <a href="https://localhost:7013/connect/authorize?client_id=client1&response_type=code&scope=email%20profile&redirect_uri=https://localhost:7106/signin-oidc">Direkt till IdentityServer</a>
+
     </NotAuthorized>
 </AuthorizeView>
 
-@code{
-        protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-    }
-    private void NavigateToLogin()
-    {
-        Nav.NavigateTo("authentication/login", forceLoad: true);
-    }
-
-    private void NavigateToLogout()
+@code {
+    void Logout()
     {
         Nav.NavigateTo("authentication/logout", forceLoad: true);
+    }
+
+    void Login()
+    {
+        Nav.NavigateTo("https://localhost:7013/connect/authorize?client_id=client1&response_type=code&scope=email%20profile&redirect_uri=https://localhost:7106/signin-oidc", forceLoad: true);
     }
 
 
