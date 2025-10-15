@@ -11,7 +11,7 @@
 <form asp-controller="Authorization" asp-action="Accept" method="post">
     @Html.AntiForgeryToken()
     <p>
-        Den här applikationen vill få tillgång till ditt konto:
+        This application wants access to your account:
     </p>
 
     <ul>
@@ -31,6 +31,6 @@
     <input type="hidden" name="state" value="@Model.State" />
     <input type="hidden" name="nonce" value="@Model.Nonce" />
 
-    <button type="submit" name="submit" value="accept" class="btn btn-primary">Tillåt</button>
-    <button type="submit" name="submit" value="deny" class="btn btn-secondary">Avbryt</button>
+    <button type="submit" name="submit" value="accept" class="btn btn-primary">Allow</button>
+    <button type="submit" name="submit" value="deny" class="btn btn-secondary">Deny</button>
 </form>

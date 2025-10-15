@@ -19,6 +19,11 @@ namespace SSO.IdentityServer
             Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Logging.AddFilter("OpenIddict", LogLevel.Debug);
+            builder.Logging.AddFilter("OpenIddict.Server", LogLevel.Debug);
+            builder.Logging.AddFilter("Microsoft.AspNetCore.Authentication.OpenIdConnect", LogLevel.Debug);
+            builder.Logging.AddConsole();
+
             builder.Services.AddControllers();
             builder.Services.AddControllersWithViews();
             
@@ -43,40 +48,31 @@ namespace SSO.IdentityServer
     .AddCore(opt => opt.UseEntityFrameworkCore().UseDbContext<ApplicationDbContext>())
     .AddServer(opt =>
     {
-        
-        opt.SetAuthorizationEndpointUris("/connect/authorize");
-        opt.SetTokenEndpointUris("/connect/token");
 
-        opt.AllowAuthorizationCodeFlow().
-            AllowRefreshTokenFlow();
-        opt.RegisterScopes("openid", "email", "profile");
-        opt.AcceptAnonymousClients();
-        opt.AddDevelopmentEncryptionCertificate();
-        opt.AddDevelopmentSigningCertificate();
+        opt.
+            SetAuthorizationEndpointUris("/connect/authorize")
+            .SetTokenEndpointUris("/connect/token")
+
+        .SetEndSessionEndpointUris("/connect/logout")
+
+        .AllowAuthorizationCodeFlow()
+        .RequireProofKeyForCodeExchange()
+        .AllowRefreshTokenFlow()
+        .RegisterScopes("openid", "email", "profile")
+        .AddDevelopmentEncryptionCertificate()
+        .AddDevelopmentSigningCertificate();
 
         opt.UseAspNetCore()
             .EnableAuthorizationEndpointPassthrough()
+
             .EnableTokenEndpointPassthrough()
+            .EnableEndSessionEndpointPassthrough()
             .EnableStatusCodePagesIntegration();
 
-        opt.DisableAccessTokenEncryption(); 
-        opt.AddEventHandler<OpenIddict.Server.OpenIddictServerEvents.ProcessErrorContext>(builder =>
-        {
-            builder.UseInlineHandler(async context =>
-            {
-                if (context.Transaction.Properties.TryGetValue("httpContext", out var ctxObj) && ctxObj is HttpContext httpContext)
-                {
-                    var logger = httpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(context.Error);
-                }
-                else
-                {
-                   
-                    Console.WriteLine($"OpenIddict error: {context.Error}");
-                }
-                await Task.CompletedTask;
-            });
-            });
+
+        opt.DisableAccessTokenEncryption();
+        
+
 
     })
     .AddValidation(opt =>

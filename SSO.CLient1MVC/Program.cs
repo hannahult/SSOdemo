@@ -26,10 +26,14 @@ namespace SSO.CLient1MVC
                 options.ClientId = "client1";
                 options.ClientSecret = "secret";
                 options.ResponseType = "code";
-                options.SaveTokens = true;
-                options.UsePkce = false;
+                options.UsePkce = true;
+                options.SaveTokens = true;              
+                options.ResponseMode = "form_post";
+
                 options.CallbackPath = "/signin-oidc";
-                options.RequireHttpsMetadata = false;
+                options.SignedOutCallbackPath = "/signout-callback-oidc";
+                options.RequireHttpsMetadata = true;
+                options.SignedOutRedirectUri = "https://localhost:7103";
 
                 options.Scope.Add("openid");
                 options.Scope.Add("email");
@@ -40,13 +44,7 @@ namespace SSO.CLient1MVC
                     NameClaimType = "name",
                     RoleClaimType = "role"
                 };
-                options.Events.OnTokenResponseReceived = context =>
-                {
-                    Console.WriteLine("Token received:");
-                    Console.WriteLine(context.TokenEndpointResponse.AccessToken);
-                    Console.WriteLine(context.TokenEndpointResponse.IdToken);
-                    return Task.CompletedTask;
-                };
+           
             });
 
             builder.Services.AddControllersWithViews();

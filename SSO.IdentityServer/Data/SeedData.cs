@@ -39,7 +39,10 @@ namespace SSO.IdentityServer.Data
                 {
                     Permissions.Endpoints.Authorization,
                     Permissions.Endpoints.Token,
+                     OpenIddictConstants.Permissions.Endpoints.EndSession,
                     Permissions.GrantTypes.AuthorizationCode,
+                    Permissions.Endpoints.Introspection,
+                    Permissions.Endpoints.Revocation,
                     Permissions.ResponseTypes.Code,
                     Permissions.Scopes.Email,
                     Permissions.Scopes.Profile,
@@ -47,7 +50,11 @@ namespace SSO.IdentityServer.Data
                     Permissions.Prefixes.Scope + Scopes.Profile,
                     Permissions.Prefixes.Scope + Scopes.OpenId,
                     Permissions.Prefixes.Resource + "resource_server"
-                }
+                },
+                    Requirements =
+                    {
+                        OpenIddictConstants.Requirements.Features.ProofKeyForCodeExchange
+                    }
                 });
             }
             if (await appManager.FindByClientIdAsync("client2") is null)
@@ -61,9 +68,12 @@ namespace SSO.IdentityServer.Data
                     ClientType = ClientTypes.Confidential,
                     PostLogoutRedirectUris = { new Uri("https://localhost:7103/signout-callback-oidc") },
                     Permissions =
-                {
+                    {
                     Permissions.Endpoints.Authorization,
                     Permissions.Endpoints.Token,
+                    OpenIddictConstants.Permissions.Endpoints.EndSession,
+                    Permissions.Endpoints.Introspection,
+                    Permissions.Endpoints.Revocation,
                     Permissions.GrantTypes.AuthorizationCode,
                     Permissions.ResponseTypes.Code,
                     Permissions.Scopes.Email,
@@ -72,7 +82,11 @@ namespace SSO.IdentityServer.Data
                     Permissions.Prefixes.Scope + Scopes.Profile,
                     Permissions.Prefixes.Scope + Scopes.OpenId,
                     Permissions.Prefixes.Resource + "resource_server"
-                }
+                    },
+                    Requirements =
+                    {
+                        OpenIddictConstants.Requirements.Features.ProofKeyForCodeExchange
+                    }
                 });
             }
         }

@@ -18,18 +18,21 @@ namespace SSO.Client2
             })
             .AddCookie()
 
-
-
             .AddOpenIdConnect("oidc", options =>
             {
                 options.Authority = "https://localhost:7013";
                 options.ClientId = "client2";
                 options.ClientSecret = "secret";
                 options.ResponseType = "code";
+                options.UsePkce = true;
                 options.SaveTokens = true;
-                options.UsePkce = false;
+               
+                options.ResponseMode = "form_post";
+
                 options.CallbackPath = "/signin-oidc";
-                options.RequireHttpsMetadata = false;
+                options.SignedOutCallbackPath = "/signout-callback-oidc";
+                options.RequireHttpsMetadata = true;
+                options.SignedOutRedirectUri = "https://localhost:7103";
 
                 options.Scope.Add("openid");
                 options.Scope.Add("email");
@@ -40,16 +43,11 @@ namespace SSO.Client2
                     NameClaimType = "name",
                     RoleClaimType = "role"
                 };
-                options.Events.OnTokenResponseReceived = context =>
-                {
-                    Console.WriteLine("Token received:");
-                    Console.WriteLine(context.TokenEndpointResponse.AccessToken);
-                    Console.WriteLine(context.TokenEndpointResponse.IdToken);
-                    return Task.CompletedTask;
-                };
+
             });
 
             builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
 
             var app = builder.Build();
 

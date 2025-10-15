@@ -19,8 +19,6 @@ namespace SSO.IdentityServer.Controllers
             return View("Authorize", request);
 
         }
-
-
         [HttpPost("/connect/authorize")]
         [ValidateAntiForgeryToken]
         public IActionResult Accept(string submit)
@@ -68,5 +66,12 @@ namespace SSO.IdentityServer.Controllers
 
             return SignIn(result.Principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
+        [HttpGet("~/connect/logout")]
+        [HttpPost("~/connect/logout")]
+        public IActionResult Logout()
+        {
+           return SignOut(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+        }
+        
     }
 }
