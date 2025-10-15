@@ -22,7 +22,7 @@ namespace SSO.Client2
             {
                 options.Authority = "https://localhost:7013";
                 options.ClientId = "client2";
-                options.ClientSecret = "secret";
+                //options.ClientSecret = "secret";
                 options.ResponseType = "code";
                 options.UsePkce = true;
                 options.SaveTokens = true;

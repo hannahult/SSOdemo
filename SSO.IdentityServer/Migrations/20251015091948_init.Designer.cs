@@ -12,8 +12,8 @@ using SSO.IdentityServer.Data;
 namespace SSO.IdentityServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251015083948_Init")]
-    partial class Init
+    [Migration("20251015091948_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

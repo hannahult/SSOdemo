@@ -56,7 +56,6 @@ namespace SSO.IdentityServer
         .SetEndSessionEndpointUris("/connect/logout")
 
         .AllowAuthorizationCodeFlow()
-        .RequireProofKeyForCodeExchange()
         .AllowRefreshTokenFlow()
         .RegisterScopes("openid", "email", "profile")
         .AddDevelopmentEncryptionCertificate()

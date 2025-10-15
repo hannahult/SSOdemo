@@ -50,11 +50,8 @@ namespace SSO.IdentityServer.Data
                     Permissions.Prefixes.Scope + Scopes.Profile,
                     Permissions.Prefixes.Scope + Scopes.OpenId,
                     Permissions.Prefixes.Resource + "resource_server"
-                },
-                    Requirements =
-                    {
-                        OpenIddictConstants.Requirements.Features.ProofKeyForCodeExchange
-                    }
+                }
+
                 });
             }
             if (await appManager.FindByClientIdAsync("client2") is null)

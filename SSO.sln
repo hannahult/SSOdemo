@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSO.Client1MVC", "SSO.CLien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSO.Client2", "SSO.Client2\SSO.Client2.csproj", "{3D3695C5-8CFD-4C6F-AEC0-3613EAC02055}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SSO.Client2WASM", "SSO.Client2WASM\SSO.Client2WASM.csproj", "{A1A6F266-E27C-4DE2-930D-D464DE28D4C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3D3695C5-8CFD-4C6F-AEC0-3613EAC02055}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D3695C5-8CFD-4C6F-AEC0-3613EAC02055}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D3695C5-8CFD-4C6F-AEC0-3613EAC02055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1A6F266-E27C-4DE2-930D-D464DE28D4C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1A6F266-E27C-4DE2-930D-D464DE28D4C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1A6F266-E27C-4DE2-930D-D464DE28D4C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1A6F266-E27C-4DE2-930D-D464DE28D4C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

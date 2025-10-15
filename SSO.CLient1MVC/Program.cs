@@ -18,22 +18,20 @@ namespace SSO.CLient1MVC
             })
             .AddCookie()
 
-            
-
             .AddOpenIdConnect("oidc", options =>
             {
                 options.Authority = "https://localhost:7013"; 
                 options.ClientId = "client1";
                 options.ClientSecret = "secret";
                 options.ResponseType = "code";
-                options.UsePkce = true;
+                options.UsePkce = false;
                 options.SaveTokens = true;              
                 options.ResponseMode = "form_post";
 
                 options.CallbackPath = "/signin-oidc";
                 options.SignedOutCallbackPath = "/signout-callback-oidc";
-                options.RequireHttpsMetadata = true;
-                options.SignedOutRedirectUri = "https://localhost:7103";
+                options.RequireHttpsMetadata = false;
+                options.SignedOutRedirectUri = "https://localhost:7272";
 
                 options.Scope.Add("openid");
                 options.Scope.Add("email");
