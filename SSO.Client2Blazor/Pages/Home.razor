@@ -1,12 +1,12 @@
 ﻿@page "/"
-
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 <PageTitle>Home</PageTitle>
 
-<h1>Welcome to Client 2 WebAssembly Standalone App</h1>
-
 <div class="text-center mt-5">
+    <h1 class="display-4">Welcome to Client 2 Blazor WebAssembly Standalone App</h1>
 
-  @if (context?.User?.Identity?.IsAuthenticated == true)
+    @if (context?.User?.Identity?.IsAuthenticated == true)
     {
         <h4>Hello @context.User.Identity.Name!</h4>
         <p>You are logged in via SSO.</p>

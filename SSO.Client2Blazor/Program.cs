@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 
-namespace SSO.Client2WASM
+namespace SSO.Client2Blazor
 {
     public class Program
     {
@@ -14,18 +17,17 @@ namespace SSO.Client2WASM
 
             builder.Services.AddOidcAuthentication(options =>
             {
-                options.ProviderOptions.Authority = "https://localhost:7013";
+                options.ProviderOptions.Authority = "https://localhost:7013"; 
                 options.ProviderOptions.ClientId = "client2";
-                options.ProviderOptions.ResponseType = "code";
+                options.ProviderOptions.ResponseType = "code"; 
                 options.ProviderOptions.DefaultScopes.Add("openid");
                 options.ProviderOptions.DefaultScopes.Add("profile");
                 options.ProviderOptions.DefaultScopes.Add("email");
 
-                options.CallbackPath = "/signin-oidc";
-                options.SignedOutCallbackPath = "/signout-callback-oidc";
-                options.RequireHttpsMetadata = false;
-                options.SignedOutRedirectUri = "https://localhost:7023";
-
+                options.AuthenticationPaths.LogInCallbackPath = "authentication/login-callback";
+                options.AuthenticationPaths.LogOutCallbackPath = "authentication/logout-callback";
+                options.AuthenticationPaths.RemoteProfilePath = "authentication/profile";
+                options.AuthenticationPaths.LogOutPath = "authentication/logout";
             });
 
             await builder.Build().RunAsync();
