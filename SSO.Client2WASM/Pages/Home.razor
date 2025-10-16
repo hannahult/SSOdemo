@@ -1,35 +1,21 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager NavManager
+@attribute [AllowAnonymous]
 
 <PageTitle>Home</PageTitle>
 
-<h1>Welcome to Client 2 WebAssembly Standalone App</h1>
-
-<div class="text-center mt-5">
-
-  @if (context?.User?.Identity?.IsAuthenticated == true)
-    {
-        <h4>Hello @context.User.Identity.Name!</h4>
-        <p>You are logged in via SSO.</p>
-        <a class="btn btn-primary" href="secure">Show protected information</a>
-        <RemoteAuthenticatorView Action="LogOut" />
-    }
-    else
-    {
-        <h4>You are not logged in.</h4>
-        <p>
-            <a class="btn btn-primary" href="authentication/login">Login and show protected information</a>
-        </p>
-    }
-</div>
-
-@code {
-    [CascadingParameter]
-    private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
-
-    private AuthenticationState? context;
-
-    protected override async Task OnInitializedAsync()
-    {
-        context = await AuthenticationStateTask;
-    }
-}
+<CascadingAuthenticationState>
+    <AuthorizeView>
+        <Authorized>
+            <h3>Hello @context.User.Identity?.Name!</h3>
+            <p>You are logged in via SSO.</p>
+            <a class="btn btn-primary" href="authentication/logout">Logout</a>
+        </Authorized>
+        <NotAuthorized>
+            <h4>You are not logged in.</h4>
+            <a class="btn btn-primary" href="authentication/login">Login</a>
+        </NotAuthorized>
+    </AuthorizeView>
+</CascadingAuthenticationState>

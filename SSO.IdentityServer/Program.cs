@@ -28,7 +28,9 @@ namespace SSO.IdentityServer
             builder.Services.AddControllersWithViews();
             
             builder.Services.AddRazorPages();
-            
+
+            builder.Services.AddCors();
+
             builder.Services.AddOpenApi();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
@@ -57,6 +59,7 @@ namespace SSO.IdentityServer
 
         .AllowAuthorizationCodeFlow()
         .AllowRefreshTokenFlow()
+        .AcceptAnonymousClients()
         .RegisterScopes("openid", "email", "profile")
         .AddDevelopmentEncryptionCertificate()
         .AddDevelopmentSigningCertificate();
@@ -90,6 +93,13 @@ namespace SSO.IdentityServer
             {
                 app.MapOpenApi();
             }
+   app.UseCors(policy =>
+            {
+                policy.WithOrigins("https://localhost:7193", "http://localhost:5010")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod()
+                      .AllowCredentials();
+            });
 
             app.UseRouting();
             app.UseHttpsRedirection();
@@ -103,6 +113,7 @@ namespace SSO.IdentityServer
 
             app.MapRazorPages();
 
+         
             await SeedData.InitializeAsync(app.Services);
 
             app.Run();

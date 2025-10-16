@@ -59,11 +59,11 @@ namespace SSO.IdentityServer.Data
                 await appManager.CreateAsync(new OpenIddictApplicationDescriptor
                 {
                     ClientId = "client2",
-                    ClientSecret = "secret",
-                    DisplayName = "MVC Client 2",
-                    RedirectUris = { new Uri("https://localhost:7103/signin-oidc") },
-                    ClientType = ClientTypes.Confidential,
-                    PostLogoutRedirectUris = { new Uri("https://localhost:7103/signout-callback-oidc") },
+                    DisplayName = "Blazor Client 2",
+                    RedirectUris = { new Uri("https://localhost:7193/authentication/login-callback") },
+                    ClientType = ClientTypes.Public,
+                    ConsentType = ConsentTypes.Explicit,
+                    PostLogoutRedirectUris = { new Uri("https://localhost:7193/authentication/logout-callback") },
                     Permissions =
                     {
                     Permissions.Endpoints.Authorization,

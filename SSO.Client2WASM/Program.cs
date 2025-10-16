@@ -1,4 +1,5 @@
-
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 namespace SSO.Client2WASM
 {
@@ -21,10 +22,13 @@ namespace SSO.Client2WASM
                 options.ProviderOptions.DefaultScopes.Add("profile");
                 options.ProviderOptions.DefaultScopes.Add("email");
 
-                options.CallbackPath = "/signin-oidc";
-                options.SignedOutCallbackPath = "/signout-callback-oidc";
-                options.RequireHttpsMetadata = false;
-                options.SignedOutRedirectUri = "https://localhost:7023";
+                options.AuthenticationPaths.LogInPath = "authentication/login";
+                options.AuthenticationPaths.LogOutPath = "authentication/logout";
+                options.AuthenticationPaths.LogInCallbackPath = "authentication/login-callback";
+                options.AuthenticationPaths.LogOutCallbackPath = "authentication/logout-callback";
+
+                options.ProviderOptions.RedirectUri = "https://localhost:7193/authentication/login-callback";
+                options.ProviderOptions.PostLogoutRedirectUri = "https://localhost:7193/authentication/logout-callback";
 
             });
 
