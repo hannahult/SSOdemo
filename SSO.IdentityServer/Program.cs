@@ -10,17 +10,18 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
+
 namespace SSO.IdentityServer
 {
     public class Program
     {
         public static async Task Main(string[] args)
         {
-            Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+           // Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Logging.AddFilter("OpenIddict", LogLevel.Debug);
-            builder.Logging.AddFilter("OpenIddict.Server", LogLevel.Debug);
+            builder.Logging.AddFilter("OpenIddict.Server", LogLevel.Trace);
             builder.Logging.AddFilter("Microsoft.AspNetCore.Authentication.OpenIdConnect", LogLevel.Debug);
             builder.Logging.AddConsole();
 
@@ -47,41 +48,42 @@ namespace SSO.IdentityServer
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddOpenIddict()
-    .AddCore(opt => opt.UseEntityFrameworkCore().UseDbContext<ApplicationDbContext>())
-    .AddServer(opt =>
-    {
+            .AddCore(opt => opt.UseEntityFrameworkCore().UseDbContext<ApplicationDbContext>())
+            
+            .AddServer(opt =>
+            {
+                opt.SetAuthorizationEndpointUris("/connect/authorize")
+                   .SetTokenEndpointUris("/connect/token")
+                   .SetEndSessionEndpointUris("/connect/logout")
+                   .SetUserInfoEndpointUris("/connect/userinfo")
+                   .SetIntrospectionEndpointUris("/connect/introspect")
 
-        opt.
-            SetAuthorizationEndpointUris("/connect/authorize")
-            .SetTokenEndpointUris("/connect/token")
+                    .RegisterScopes("openid", "email", "profile")
 
-        .SetEndSessionEndpointUris("/connect/logout")
-
-        .AllowAuthorizationCodeFlow()
-        .AllowRefreshTokenFlow()
-        .AcceptAnonymousClients()
-        .RegisterScopes("openid", "email", "profile")
-        .AddDevelopmentEncryptionCertificate()
-        .AddDevelopmentSigningCertificate();
-
-        opt.UseAspNetCore()
-            .EnableAuthorizationEndpointPassthrough()
-
-            .EnableTokenEndpointPassthrough()
-            .EnableEndSessionEndpointPassthrough()
-            .EnableStatusCodePagesIntegration();
+                   .AllowAuthorizationCodeFlow()
+                   .AllowRefreshTokenFlow()
+                   .AllowImplicitFlow()
+                    .AllowHybridFlow()
 
 
-        opt.DisableAccessTokenEncryption();
-        
+                   .AddDevelopmentEncryptionCertificate()
+                   .AddDevelopmentSigningCertificate()
+                   .EnableAuthorizationRequestCaching();
+      
 
+                opt.UseAspNetCore()
+                   .EnableAuthorizationEndpointPassthrough()
+                   .EnableTokenEndpointPassthrough()
+                   .EnableEndSessionEndpointPassthrough()
+                   .EnableStatusCodePagesIntegration();
 
-    })
-    .AddValidation(opt =>
-    {
-        opt.UseLocalServer();
-        opt.UseAspNetCore();
-    });
+                opt.DisableAccessTokenEncryption();
+            })
+            .AddValidation(opt =>
+            {
+                opt.UseLocalServer();
+                opt.UseAspNetCore();
+            });
 
             builder.Services.AddControllers();
             builder.Services.AddAuthentication();
@@ -93,9 +95,9 @@ namespace SSO.IdentityServer
             {
                 app.MapOpenApi();
             }
-   app.UseCors(policy =>
+            app.UseCors(policy =>
             {
-                policy.WithOrigins("https://localhost:7193", "http://localhost:5010")
+                policy.WithOrigins("https://localhost:7193")
                       .AllowAnyHeader()
                       .AllowAnyMethod()
                       .AllowCredentials();
@@ -112,8 +114,7 @@ namespace SSO.IdentityServer
             app.MapDefaultControllerRoute();
 
             app.MapRazorPages();
-
-         
+   
             await SeedData.InitializeAsync(app.Services);
 
             app.Run();

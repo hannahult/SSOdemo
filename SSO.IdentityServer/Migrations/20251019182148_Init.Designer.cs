@@ -12,7 +12,7 @@ using SSO.IdentityServer.Data;
 namespace SSO.IdentityServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251016083449_Init")]
+    [Migration("20251019182148_Init")]
     partial class Init
     {
         /// <inheritdoc />

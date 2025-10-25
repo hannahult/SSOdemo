@@ -44,12 +44,9 @@ namespace SSO.IdentityServer.Data
                     Permissions.Endpoints.Introspection,
                     Permissions.Endpoints.Revocation,
                     Permissions.ResponseTypes.Code,
-                    Permissions.Scopes.Email,
-                    Permissions.Scopes.Profile,
-                    Permissions.Prefixes.Scope + Scopes.Email,
-                    Permissions.Prefixes.Scope + Scopes.Profile,
                     Permissions.Prefixes.Scope + Scopes.OpenId,
-                    Permissions.Prefixes.Resource + "resource_server"
+                    Permissions.Prefixes.Scope + Scopes.Profile,
+                    Permissions.Prefixes.Scope + Scopes.Email,
                 }
 
                 });
@@ -73,12 +70,9 @@ namespace SSO.IdentityServer.Data
                     Permissions.Endpoints.Revocation,
                     Permissions.GrantTypes.AuthorizationCode,
                     Permissions.ResponseTypes.Code,
-                    Permissions.Scopes.Email,
-                    Permissions.Scopes.Profile,
-                    Permissions.Prefixes.Scope + Scopes.Email,
-                    Permissions.Prefixes.Scope + Scopes.Profile,
                     Permissions.Prefixes.Scope + Scopes.OpenId,
-                    Permissions.Prefixes.Resource + "resource_server"
+                    Permissions.Prefixes.Scope + Scopes.Profile,
+                    Permissions.Prefixes.Scope + Scopes.Email,
                     },
                     Requirements =
                     {

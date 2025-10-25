@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using Azure.Core;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict.Abstractions;
@@ -12,18 +13,22 @@ namespace SSO.IdentityServer.Controllers
     public class AuthorizationController : Controller
     {
         [HttpGet("/connect/authorize")]
-        public IActionResult Authorize()
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> Authorize()
         {
-            var request = HttpContext.GetOpenIddictServerRequest();
+            var request = HttpContext.GetOpenIddictServerRequest()
+                ?? throw new InvalidOperationException("The OpenID Connect request could not be retrieved.");
 
-            return View("Authorize", request);
+            ViewData["RequestId"] = Request.Query["request_id"].ToString();
+            return await Task.FromResult(View("Authorize", request));
 
         }
         [HttpPost("/connect/authorize")]
-        [ValidateAntiForgeryToken]
+        [IgnoreAntiforgeryToken]
         public IActionResult Accept(string submit)
         {
-            var request = HttpContext.GetOpenIddictServerRequest();
+            var request = HttpContext.GetOpenIddictServerRequest()
+            ?? throw new InvalidOperationException("The OpenID Connect request could not be retrieved.");
 
             if (submit == "accept")
             {
@@ -33,7 +38,6 @@ namespace SSO.IdentityServer.Controllers
 
                 var principal = new ClaimsPrincipal(identity);
                 principal.SetScopes(request.GetScopes());
-                principal.SetResources("resource_server");
 
                 return SignIn(principal, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
             }
@@ -41,7 +45,7 @@ namespace SSO.IdentityServer.Controllers
             return Forbid(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        [HttpPost("~/connect/token")]
+        [HttpPost("~/connect/token"), IgnoreAntiforgeryToken]
         public async Task<IActionResult> Exchange()
         {
             var request = HttpContext.GetOpenIddictServerRequest();

@@ -7,6 +7,16 @@
     <main>
         <div class="top-row px-4">
             <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <AuthorizeView>
+                <Authorized>
+                    <p>Inloggad som: @context.User.Identity?.Name</p>
+                    <button @onclick="Logout">Logga ut</button>
+                </Authorized>
+                <NotAuthorized>
+                    <p>Inte inloggad.</p>
+                    <button @onclick="Login">Logga in</button>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
 
         <article class="content px-4">
@@ -14,3 +24,15 @@
         </article>
     </main>
 </div>
+
+@code {
+    [Inject] NavigationManager Navigation { get; set; } = default!;
+    [Inject] SignOutSessionStateManager SignOutManager { get; set; } = default!;
+
+    private void Login() => Navigation.NavigateTo("authentication/login");
+    private async Task Logout()
+    {
+        await SignOutManager.SetSignOutState();
+        Navigation.NavigateTo("authentication/logout");
+    }
+}
