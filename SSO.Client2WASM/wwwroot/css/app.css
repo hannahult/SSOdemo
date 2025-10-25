@@ -1,3 +1,55 @@
+.navbar-brand {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.btn-outline-light:hover {
+    background-color: #ffffff;
+    color: #212529;
+    transition: 0.2s;
+}
+
+.navbar {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.sidebar {
+    background: linear-gradient(to bottom, #0a1444, #2b0a44);
+    width: 250px;
+    height: 100vh;
+    padding-top: 1rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+}
+.nav-link {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    color: white;
+    text-decoration: none;
+    border-radius: 0;
+    transition: background-color 0.2s;
+}
+
+    .nav-link:hover,
+    .nav-link.active {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+.sidebar .btn {
+    margin: 1rem 1.25rem;
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    width: calc(100% - 2.5rem);
+    transition: background-color 0.2s;
+}
+
+    .sidebar .btn:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -12,12 +64,16 @@ a, .btn-link {
 
 .btn-primary {
     color: #fff;
-    background-color: #1b6ec2;
+    background-color: #4336a4;
     border-color: #1861ac;
 }
+    .btn-primary:hover {
+        background-color: #5448b1;
+    }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #665ac0;
+    background-color: #5448b1;
 }
 
 .content {

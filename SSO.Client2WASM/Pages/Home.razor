@@ -5,13 +5,14 @@
 @attribute [AllowAnonymous]
 
 <PageTitle>Home</PageTitle>
+<h2>Welcome to Client 2 Blazor WASM!</h2>
 
 <CascadingAuthenticationState>
     <AuthorizeView>
         <Authorized>
-            <h3>Hello @context.User.Identity?.Name!</h3>
+            <h4>Hello @context.User.Identity?.Name!</h4>
             <p>You are logged in via SSO.</p>
-            <button @onclick="Logout">Logga ut</button>
+            <button class="btn btn-primary" @onclick=" Logout">Logout</button>
         </Authorized>
         <NotAuthorized>
             <h4>You are not logged in.</h4>

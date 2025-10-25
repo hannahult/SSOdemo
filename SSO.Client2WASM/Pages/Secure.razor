@@ -1,4 +1,20 @@
-﻿<h3>Secure</h3>
+﻿@page "/secure"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager Navigation
+
+<h2>Secure Page</h2>
+
+<AuthorizeView>
+    <Authorized>
+        <h4>Secret information!</h4>
+        <p>You are logged in as @context.User.Identity?.Name</p>
+    </Authorized>
+    <NotAuthorized>
+        <h4>You are not logged in.</h4>
+        <a class="btn btn-primary" href="authentication/login">Login</a>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
 
