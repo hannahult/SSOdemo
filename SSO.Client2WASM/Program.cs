@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 namespace SSO.Client2WASM
@@ -15,6 +16,8 @@ namespace SSO.Client2WASM
 
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+
 
             builder.Services.AddOidcAuthentication(options =>
             {
@@ -37,12 +40,13 @@ namespace SSO.Client2WASM
                 options.AuthenticationPaths.ProfilePath = "authentication/profile";
 
                 options.ProviderOptions.RedirectUri = "https://localhost:7193/authentication/login-callback";
-                options.ProviderOptions.PostLogoutRedirectUri = "/";
+                options.ProviderOptions.PostLogoutRedirectUri = "https://localhost:7193/";
                 options.ProviderOptions.MetadataUrl = "https://localhost:7013/.well-known/openid-configuration";
 
 
 
             });
+
             builder.Logging.SetMinimumLevel(LogLevel.Debug);
             await builder.Build().RunAsync();
         }

@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
-@inject NavigationManager NavManager
+@inject NavigationManager Navigation
 @attribute [AllowAnonymous]
 
 <PageTitle>Home</PageTitle>
@@ -11,7 +11,7 @@
         <Authorized>
             <h3>Hello @context.User.Identity?.Name!</h3>
             <p>You are logged in via SSO.</p>
-            <a class="btn btn-primary" href="authentication/logout">Logout</a>
+            <button @onclick="Logout">Logga ut</button>
         </Authorized>
         <NotAuthorized>
             <h4>You are not logged in.</h4>
@@ -19,3 +19,14 @@
         </NotAuthorized>
     </AuthorizeView>
 </CascadingAuthenticationState>
+
+@code {
+    [Inject] SignOutSessionStateManager SignOutManager { get; set; } = default!;
+
+    private void Login() => Navigation.NavigateTo("authentication/login");
+    private async Task Logout()
+    {
+        await SignOutManager.SetSignOutState();
+        Navigation.NavigateTo("authentication/logout");
+    }
+}

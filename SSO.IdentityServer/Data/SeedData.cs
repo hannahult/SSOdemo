@@ -60,7 +60,7 @@ namespace SSO.IdentityServer.Data
                     RedirectUris = { new Uri("https://localhost:7193/authentication/login-callback") },
                     ClientType = ClientTypes.Public,
                     ConsentType = ConsentTypes.Explicit,
-                    PostLogoutRedirectUris = { new Uri("https://localhost:7193/authentication/logout-callback") },
+                    PostLogoutRedirectUris = { new Uri("https://localhost:7193/") },
                     Permissions =
                     {
                     Permissions.Endpoints.Authorization,

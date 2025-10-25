@@ -14,20 +14,26 @@
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
+
+        <div class="nav-auth">
+            <AuthorizeView>
+                <Authorized>
+                    <p>Inloggad som: @context.User.Identity?.Name</p>
+                    <button class="nav-link" @onclick="Logout">Logga ut</button>
+                </Authorized>
+                <NotAuthorized>
+                    <p>Inte inloggad.</p>
+                    <button class="nav-link" @onclick="Login">Logga in</button>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
     </nav>
 </div>
 
 @code {
+    [Inject] NavigationManager Navigation { get; set; } = default!;
+    [Inject] SignOutSessionStateManager SignOutManager { get; set; } = default!;
+
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
@@ -36,4 +42,13 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
+    
+
+    private void Login() => Navigation.NavigateTo("authentication/login");
+    private async Task Logout()
+    {
+        await SignOutManager.SetSignOutState();
+        Navigation.NavigateTo("authentication/logout");
+    }
 }
+
