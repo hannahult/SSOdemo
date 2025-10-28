@@ -8,7 +8,7 @@ namespace SSO.IdentityServer.Data
 {
     public class SeedData
     {
-        public static async Task InitializeAsync(IServiceProvider serviceProvider)
+        public static async Task InitializeAsync(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             using var scope = serviceProvider.CreateScope();
 
@@ -27,10 +27,13 @@ namespace SSO.IdentityServer.Data
 
             if (await appManager.FindByClientIdAsync("client1") is null)
             {
+
+                var clientSecret = configuration["Authentication:ClientSecret"];
+
                 await appManager.CreateAsync(new OpenIddictApplicationDescriptor
                 {
                     ClientId = "client1",
-                    ClientSecret = "secret",
+                    ClientSecret = clientSecret,
                     DisplayName = "MVC Client 1",
                     RedirectUris = { new Uri("https://localhost:7272/signin-oidc") },
                     ClientType = ClientTypes.Confidential,

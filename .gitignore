@@ -10,6 +10,18 @@
 *.userosscache
 *.sln.docstates
 
+# User secrets
+**/appsettings.Development.json
+**/secrets.json
+
+# Azure publish profiles
+**/*.PublishSettings
+**/*.pubxml
+**/*.pubxml.user
+
+# Environment variables
+.env
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

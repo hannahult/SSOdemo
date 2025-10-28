@@ -20,10 +20,13 @@ namespace SSO.IdentityServer
            // Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Logging.AddFilter("OpenIddict", LogLevel.Debug);
-            builder.Logging.AddFilter("OpenIddict.Server", LogLevel.Trace);
-            builder.Logging.AddFilter("Microsoft.AspNetCore.Authentication.OpenIdConnect", LogLevel.Debug);
-            builder.Logging.AddConsole();
+            // Load appsettings + user secrets + environment variables
+            builder.Configuration
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+                .AddUserSecrets<Program>(optional: true) 
+                .AddEnvironmentVariables();
 
             builder.Services.AddControllers();
             builder.Services.AddControllersWithViews();
@@ -63,7 +66,7 @@ namespace SSO.IdentityServer
                    .AllowAuthorizationCodeFlow()
                    .AllowRefreshTokenFlow()
                    .AllowImplicitFlow()
-                    .AllowHybridFlow()
+                   .AllowHybridFlow()
 
 
                    .AddDevelopmentEncryptionCertificate()
@@ -114,8 +117,12 @@ namespace SSO.IdentityServer
             app.MapDefaultControllerRoute();
 
             app.MapRazorPages();
-   
-            await SeedData.InitializeAsync(app.Services);
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+                await SeedData.InitializeAsync(app.Services, config);
+            }
 
             app.Run();
 
