@@ -25,6 +25,7 @@ namespace SSO.IdentityServer.Data
                 await userManager.CreateAsync(user, "Admin123!");
             }
 
+            // Seed default OpenIddict client if it doesn't exist
             if (await appManager.FindByClientIdAsync("client1") is null)
             {
 
@@ -54,6 +55,8 @@ namespace SSO.IdentityServer.Data
 
                 });
             }
+
+            // Seed another OpenIddict client if it doesn't exist
             if (await appManager.FindByClientIdAsync("client2") is null)
             {
                 await appManager.CreateAsync(new OpenIddictApplicationDescriptor

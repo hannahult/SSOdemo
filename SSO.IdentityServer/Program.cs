@@ -17,7 +17,6 @@ namespace SSO.IdentityServer
     {
         public static async Task Main(string[] args)
         {
-           // Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
             var builder = WebApplication.CreateBuilder(args);
 
             // Load appsettings + user secrets + environment variables
@@ -28,14 +27,13 @@ namespace SSO.IdentityServer
                 .AddUserSecrets<Program>(optional: true) 
                 .AddEnvironmentVariables();
 
-            builder.Services.AddControllers();
-            builder.Services.AddControllersWithViews();
-            
+            // Register core MVC & Razor services
+            builder.Services.AddControllersWithViews();         
             builder.Services.AddRazorPages();
-
             builder.Services.AddCors();
-
             builder.Services.AddOpenApi();
+
+            // Configure EF Core + Identity + OpenIddict
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -50,30 +48,34 @@ namespace SSO.IdentityServer
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            // Configure OpenIddict (server + validation)
             builder.Services.AddOpenIddict()
             .AddCore(opt => opt.UseEntityFrameworkCore().UseDbContext<ApplicationDbContext>())
             
             .AddServer(opt =>
             {
+                // Server endpoints
                 opt.SetAuthorizationEndpointUris("/connect/authorize")
                    .SetTokenEndpointUris("/connect/token")
                    .SetEndSessionEndpointUris("/connect/logout")
                    .SetUserInfoEndpointUris("/connect/userinfo")
-                   .SetIntrospectionEndpointUris("/connect/introspect")
+                   .SetIntrospectionEndpointUris("/connect/introspect");
 
-                    .RegisterScopes("openid", "email", "profile")
+                // Supported scopes and flows
+                opt.RegisterScopes("openid", "email", "profile");
 
-                   .AllowAuthorizationCodeFlow()
+                opt.AllowAuthorizationCodeFlow()
                    .AllowRefreshTokenFlow()
                    .AllowImplicitFlow()
-                   .AllowHybridFlow()
+                   .AllowHybridFlow();
 
+                // Development certificates only (replace in production)
+                opt.AddDevelopmentEncryptionCertificate()
+                  .AddDevelopmentSigningCertificate();
 
-                   .AddDevelopmentEncryptionCertificate()
-                   .AddDevelopmentSigningCertificate()
-                   .EnableAuthorizationRequestCaching();
-      
+                 opt.EnableAuthorizationRequestCaching();
 
+                // Integrate with ASP.NET Core pipeline
                 opt.UseAspNetCore()
                    .EnableAuthorizationEndpointPassthrough()
                    .EnableTokenEndpointPassthrough()
@@ -88,16 +90,19 @@ namespace SSO.IdentityServer
                 opt.UseAspNetCore();
             });
 
-            builder.Services.AddControllers();
+            // Authentication & Authorization
             builder.Services.AddAuthentication();
             builder.Services.AddAuthorization();
 
             var app = builder.Build();
 
+            // OpenAPI (dev only)
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
             }
+
+            // CORS setup (allow local client)
             app.UseCors(policy =>
             {
                 policy.WithOrigins("https://localhost:7193")
@@ -106,27 +111,24 @@ namespace SSO.IdentityServer
                       .AllowCredentials();
             });
 
+            // Middleware pipeline
             app.UseRouting();
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
-
-          
+         
             app.MapControllers();
-            
             app.MapDefaultControllerRoute();
-
             app.MapRazorPages();
 
+            // Seed initial data
             using (var scope = app.Services.CreateScope())
             {
                 var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
                 await SeedData.InitializeAsync(app.Services, config);
             }
 
-            app.Run();
-
-           
+            app.Run();      
 
         }
     }
