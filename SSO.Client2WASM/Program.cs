@@ -36,7 +36,7 @@ namespace SSO.Client2WASM
 
                 options.ProviderOptions.RedirectUri = "https://ssoclient2-bpash8cshtbggqh8.swedencentral-01.azurewebsites.net/authentication/login-callback";
                 options.ProviderOptions.PostLogoutRedirectUri = "https://ssoclient2-bpash8cshtbggqh8.swedencentral-01.azurewebsites.net/";
-                options.ProviderOptions.MetadataUrl = "https://ssoclient2-bpash8cshtbggqh8.swedencentral-01.azurewebsites.net/.well-known/openid-configuration";
+                options.ProviderOptions.MetadataUrl = "https://ssoidenity-bdd9gagyezgwgjbh.swedencentral-01.azurewebsites.net/.well-known/openid-configuration";
 
 
 
