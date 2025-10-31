@@ -12,12 +12,7 @@ namespace SSO.Client2WASM
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
-            
-
-
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-
-
 
             builder.Services.AddOidcAuthentication(options =>
             {
@@ -25,7 +20,7 @@ namespace SSO.Client2WASM
 
                 options.ProviderOptions.DefaultScopes.Clear();
 
-                options.ProviderOptions.Authority = "https://localhost:7013";
+                options.ProviderOptions.Authority = "https://ssoidenity-bdd9gagyezgwgjbh.swedencentral-01.azurewebsites.net";
                 options.ProviderOptions.ClientId = "client2";
                 options.ProviderOptions.ResponseType = "code";
                 options.ProviderOptions.ResponseMode = "query";
@@ -39,9 +34,9 @@ namespace SSO.Client2WASM
                 options.AuthenticationPaths.LogOutCallbackPath = "authentication/logout-callback";
                 options.AuthenticationPaths.ProfilePath = "authentication/profile";
 
-                options.ProviderOptions.RedirectUri = "https://localhost:7193/authentication/login-callback";
-                options.ProviderOptions.PostLogoutRedirectUri = "https://localhost:7193/";
-                options.ProviderOptions.MetadataUrl = "https://localhost:7013/.well-known/openid-configuration";
+                options.ProviderOptions.RedirectUri = "https://ssoclient2-bpash8cshtbggqh8.swedencentral-01.azurewebsites.net/authentication/login-callback";
+                options.ProviderOptions.PostLogoutRedirectUri = "https://ssoclient2-bpash8cshtbggqh8.swedencentral-01.azurewebsites.net/";
+                options.ProviderOptions.MetadataUrl = "https://ssoclient2-bpash8cshtbggqh8.swedencentral-01.azurewebsites.net/.well-known/openid-configuration";
 
 
 

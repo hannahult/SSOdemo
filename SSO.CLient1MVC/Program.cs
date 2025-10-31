@@ -8,8 +8,6 @@ namespace SSO.CLient1MVC
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Logging.AddFilter("Microsoft.AspNetCore.Authentication", LogLevel.Debug);
-            builder.Logging.AddFilter("Microsoft.IdentityModel.Protocols.OpenIdConnect", LogLevel.Debug);
 
             builder.Services.AddAuthentication(options =>
             {
@@ -20,7 +18,7 @@ namespace SSO.CLient1MVC
 
             .AddOpenIdConnect("oidc", options =>
             {
-                options.Authority = "https://localhost:7013"; 
+                options.Authority = "https://ssoidenity-bdd9gagyezgwgjbh.swedencentral-01.azurewebsites.net"; 
                 options.ClientId = "client1";
                 options.ClientSecret = "secret";
                 options.ResponseType = "code";
@@ -31,7 +29,7 @@ namespace SSO.CLient1MVC
                 options.CallbackPath = "/signin-oidc";
                 options.SignedOutCallbackPath = "/signout-callback-oidc";
                 options.RequireHttpsMetadata = false;
-                options.SignedOutRedirectUri = "https://localhost:7272";
+                options.SignedOutRedirectUri = "https://ssoclient1-ccasghfwb3frh8er.swedencentral-01.azurewebsites.net";
 
                 options.Scope.Add("openid");
                 options.Scope.Add("email");

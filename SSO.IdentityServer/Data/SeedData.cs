@@ -36,9 +36,9 @@ namespace SSO.IdentityServer.Data
                     ClientId = "client1",
                     ClientSecret = clientSecret,
                     DisplayName = "MVC Client 1",
-                    RedirectUris = { new Uri("https://localhost:7272/signin-oidc") },
+                    RedirectUris = { new Uri("https://ssoclient1-ccasghfwb3frh8er.swedencentral-01.azurewebsites.net/signin-oidc") },
                     ClientType = ClientTypes.Confidential,
-                    PostLogoutRedirectUris = { new Uri("https://localhost:7272/signout-callback-oidc") },
+                    PostLogoutRedirectUris = { new Uri("https://ssoclient1-ccasghfwb3frh8er.swedencentral-01.azurewebsites.net/signout-callback-oidc") },
                     Permissions =
                 {
                     Permissions.Endpoints.Authorization,
@@ -63,10 +63,10 @@ namespace SSO.IdentityServer.Data
                 {
                     ClientId = "client2",
                     DisplayName = "Blazor Client 2",
-                    RedirectUris = { new Uri("https://localhost:7193/authentication/login-callback") },
+                    RedirectUris = { new Uri("https://ssoclient2-bpash8cshtbggqh8.swedencentral-01.azurewebsites.net/authentication/login-callback") },
                     ClientType = ClientTypes.Public,
                     ConsentType = ConsentTypes.Explicit,
-                    PostLogoutRedirectUris = { new Uri("https://localhost:7193/") },
+                    PostLogoutRedirectUris = { new Uri("https://ssoclient2-bpash8cshtbggqh8.swedencentral-01.azurewebsites.net/") },
                     Permissions =
                     {
                     Permissions.Endpoints.Authorization,
