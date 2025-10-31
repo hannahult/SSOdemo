@@ -36,7 +36,7 @@ namespace SSO.IdentityServer
             // Configure EF Core + Identity + OpenIddict
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING"));
                 options.UseOpenIddict(); 
             });
 
