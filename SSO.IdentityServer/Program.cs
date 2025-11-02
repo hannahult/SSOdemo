@@ -69,11 +69,12 @@ namespace SSO.IdentityServer
                    .AllowImplicitFlow()
                    .AllowHybridFlow();
 
-                // Development certificates only (replace in production)
-                opt.AddDevelopmentEncryptionCertificate()
-                  .AddDevelopmentSigningCertificate();
+                // Tokens configuration
+                opt.AddEphemeralEncryptionKey()
+                   .AddEphemeralSigningKey()
+                   .DisableAccessTokenEncryption();
 
-                 opt.EnableAuthorizationRequestCaching();
+                opt.EnableAuthorizationRequestCaching();
 
                 // Integrate with ASP.NET Core pipeline
                 opt.UseAspNetCore()
@@ -105,7 +106,8 @@ namespace SSO.IdentityServer
             // CORS setup (allow local client)
             app.UseCors(policy =>
             {
-                policy.WithOrigins("https://localhost:7193")
+                policy.WithOrigins("https://localhost:7193",
+                    "https://ssoclient2-bpash8cshtbggqh8.swedencentral-01.azurewebsites.net")
                       .AllowAnyHeader()
                       .AllowAnyMethod()
                       .AllowCredentials();
@@ -128,7 +130,22 @@ namespace SSO.IdentityServer
                 await SeedData.InitializeAsync(app.Services, config);
             }
 
-            app.Run();      
+            try
+            {
+                using (var scope = app.Services.CreateScope())
+                {
+                    var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+                    await SeedData.InitializeAsync(app.Services, config);
+                }
+
+                app.Run();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Startup failed: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+                throw;
+            }
 
         }
     }
