@@ -1,14 +1,15 @@
 
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
 using OpenIddict.Server.AspNetCore;
 using SSO.IdentityServer.Data;
 using static OpenIddict.Abstractions.OpenIddictConstants;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 
 namespace SSO.IdentityServer
@@ -42,6 +43,10 @@ namespace SSO.IdentityServer
 
             builder.Services.AddDistributedMemoryCache();
 
+            // Disable automatic key generation for Data Protection
+            builder.Services.AddDataProtection()
+                            .DisableAutomaticKeyGeneration();
+
             builder.Services.AddDefaultIdentity<IdentityUser>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
@@ -71,8 +76,7 @@ namespace SSO.IdentityServer
 
                 // Tokens configuration
                 opt.AddEphemeralEncryptionKey()
-                   .AddEphemeralSigningKey()
-                   .DisableAccessTokenEncryption();
+                   .AddEphemeralSigningKey();
 
                 opt.EnableAuthorizationRequestCaching();
 
@@ -123,15 +127,15 @@ namespace SSO.IdentityServer
             app.MapDefaultControllerRoute();
             app.MapRazorPages();
 
-            // Seed initial data
-            using (var scope = app.Services.CreateScope())
+            if (!app.Environment.IsDevelopment())
             {
-                var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-                await SeedData.InitializeAsync(app.Services, config);
+                app.UseDeveloperExceptionPage();
             }
+
 
             try
             {
+                // Seed initial data
                 using (var scope = app.Services.CreateScope())
                 {
                     var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
